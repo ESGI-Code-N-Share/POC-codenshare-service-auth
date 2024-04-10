@@ -12,9 +12,18 @@ export class AuthService {
     }
 
     async checkToken(token: string) {
-        console.log("Check Token ...")
         return this.auth.verifyIdToken(token);
     }
+
+    async admin() {
+        console.log("Authorisé")
+    }
+
+    async getUser(uid: string) {
+        return this.auth.getUser(uid);
+
+    }
+
 
     async createUser(email: string, password: string) {
         console.log("Create User...");

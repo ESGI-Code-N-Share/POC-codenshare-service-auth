@@ -1,14 +1,15 @@
 import * as express from "express";
 import {authController} from "./application.configuration";
-import {getToken} from "./middlewares/auth.middleware";
+import {authRequired} from "./middlewares/auth.middleware";
+import {RoleEnum} from "./role";
 
 export class AuthRoute {
     static async getRoutes() {
         const router = express.Router();
 
-        router.get("/login", getToken(), await authController.login());
+        router.get("/login", authRequired(), await authController.login());
         router.get("/signUp", await authController.signUp());
-        // router.get("/admin", getToken(), await authController.login());
+        router.get("/admin", authRequired([RoleEnum.ADMIN]), await authController.admin());
 
         return router;
     }
