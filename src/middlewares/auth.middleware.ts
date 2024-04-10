@@ -34,13 +34,21 @@ export function authRequired(roles?: [RoleEnum]): RequestHandler {
                     }
 
                     if (roles && roles.length > 0) {
-                        console.log("Check roles ....");
-                        console.log(user.customClaims)
+                        if (!user.customClaims) {
+                            res.status(404).send({message: "Forbidden"});
+                        }
+
+                        if (user.customClaims) {
+                            const userRoles = user.customClaims.roles as RoleEnum[];
+
+                            if (!userRoles.some(role => roles.some(name => name === role))) {
+                                res.status(404).send({message: "Forbidden"});
+                            }
+                        }
                     }
 
                     req.uid = user.uid;
                     next();
-
 
                 })
                 .catch((e) => {

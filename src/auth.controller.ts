@@ -10,7 +10,10 @@ export class AuthController {
         return async (req: Request, res: Response) => {
             try {
                 console.log(req.uid!)
-                res.status(200).send({id: req.uid})
+                //todo: set custom claims
+                // tell to client to refresh
+                await this.authService.setClaims(req.uid!);
+                res.status(200).send()
 
             } catch (e: any) {
                 console.log(`${e}`);
