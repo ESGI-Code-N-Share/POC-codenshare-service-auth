@@ -16,16 +16,17 @@ export class AuthService {
         return this.auth.verifyIdToken(token);
     }
 
-    // async signUp() {
-    //     // console.log(this.auth)
-    //     console.log("Login .....")
-    //
-    //     // todo: logique métier
-    //     // signUpWithEmailAndPassword(mail, password);
-    //
-    //     // todo: set role of user with uuid in firestore
-    //
-    //     // todo : return user or token
-    //
-    // }
+    async createUser(email: string, password: string) {
+        console.log("Create User...");
+
+        if (!email.trim() || !password.trim()) {
+            throw new Error("auth/empty-fields");
+        }
+
+        return this.auth.createUser({
+            email: email,
+            password: password
+        })
+
+    }
 }
