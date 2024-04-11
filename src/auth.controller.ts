@@ -9,12 +9,7 @@ export class AuthController {
     async login(): Promise<RequestHandler> {
         return async (req: Request, res: Response) => {
             try {
-                console.log(req.uid!)
-                //todo: set custom claims
-                // tell to client to refresh
-                await this.authService.setClaims(req.uid!);
-                res.status(200).send()
-
+                res.status(200).send({message: "Vous êtes connecté"})
             } catch (e: any) {
                 console.log(`${e}`);
                 res.status(500).statusMessage = "server_error";
@@ -36,9 +31,11 @@ export class AuthController {
                 }
 
                 try {
-                    await this.authService.createUser(email, password);
+                    const userCreated = await this.authService.createUser(email, password);
+                    await this.authService.setClaims(userCreated.uid);
+                    await this.authService.sendMailForEmailVerification(email);
                     res.status(201).statusMessage = "User inscrit";
-                    res.send().end()
+                    res.send({message: "Un mail vous a été envoyé. Merci de le confirmer."}).end()
 
                 } catch (e: any) {
                     res.status(400).send({message: e.message}).end()
@@ -66,6 +63,29 @@ export class AuthController {
 
             } catch (e: any) {
                 res.status(400).end();
+            }
+        }
+    }
+
+    async resetPassword(): Promise<RequestHandler> {
+        return async (req: Request, res: Response) => {
+            try {
+                if (typeof req.body["email"] != "string") {
+                    return res.status(400).end();
+                }
+
+                const email = req.body["email"] as string;
+                if (!email?.trim()) {
+                    return res.status(400).end();
+                }
+
+                await this.authService.sendMailForResetPassword(email);
+                res.status(200).send({message: "Email envoyé"})
+
+            } catch (e: any) {
+                console.log(`${e}`);
+                res.status(500).statusMessage = "server_error";
+                res.send().end();
             }
         }
     }

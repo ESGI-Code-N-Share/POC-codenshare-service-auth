@@ -2,7 +2,7 @@ import {Request, RequestHandler} from "express";
 import {authService} from "../application.configuration";
 import {RoleEnum} from "../role";
 
-declare module 'express' {
+declare module 'express' { //fixme
     export interface Request {
         uid?: string;
     }
@@ -33,32 +33,36 @@ export function authRequired(roles?: [RoleEnum]): RequestHandler {
                         return res.status(400).statusMessage = "User not found";
                     }
 
-                    if (roles && roles.length > 0) {
-                        if (!user.customClaims) {
-                            res.status(404).send({message: "Forbidden"});
-                        }
+                    if (!user.emailVerified) {
+                        return res.status(400).send({message: "Email not verified"});
+                    }
 
+                    if (roles && roles.length > 0) {
+
+                        if (!user.customClaims) {
+                            return res.status(404).send({message: "Forbidden"});
+                        }
                         if (user.customClaims) {
                             const userRoles = user.customClaims.roles as RoleEnum[];
 
                             if (!userRoles.some(role => roles.some(name => name === role))) {
-                                res.status(404).send({message: "Forbidden"});
+                                return res.status(404).send({message: "Forbidden"});
                             }
                         }
                     }
 
-                    req.uid = user.uid;
+                    req.uid = user.uid; // fixme
                     next();
 
                 })
                 .catch((e) => {
                     console.log(e)
-                    res.status(400).send({message: "Invalid Token"});
+                    return res.status(400).send({message: "Invalid Token"});
                 })
 
         } catch (e) {
             console.error(e)
-            res.status(500).send({message: "Server Error"});
+            return res.status(500).send({message: "Server Error"});
 
         }
 
