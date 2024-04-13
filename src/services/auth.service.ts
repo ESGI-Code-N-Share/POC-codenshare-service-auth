@@ -45,17 +45,12 @@ export class AuthService {
 
     }
 
-    async sendMailForEmailVerification(email: string) {
+    async sendLinkForMailVerification(email: string) {
         if (!email.trim()) {
             throw new Error("email is missing");
         }
 
-        //todo: https://stackoverflow.com/questions/41882626/firebase-admin-sdk-create-user-and-send-verification-email
-        this.auth.generateEmailVerificationLink(email).then(async (link) => {
-            console.log(`Mail sent to ${email} : ${link}`);
-        }).catch((e) => {
-            console.error(`Error to send email to ${email} cause of ${e}`)
-        })
+        return await this.auth.generateEmailVerificationLink(email);
     }
 
     async sendMailForResetPassword(email: string) {
@@ -63,11 +58,6 @@ export class AuthService {
             throw new Error("email is missing");
         }
 
-        //todo: https://stackoverflow.com/questions/41882626/firebase-admin-sdk-create-user-and-send-verification-email
-        this.auth.generatePasswordResetLink(email).then((link) => {
-            console.log(`Mail sent to ${email} : ${link}`);
-        }).catch((e) => {
-            console.error(`Error to send email to ${email} cause of ${e}`)
-        })
+        return this.auth.generatePasswordResetLink(email);
     }
 }

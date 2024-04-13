@@ -33,12 +33,13 @@ export class AuthController {
                 try {
                     const userCreated = await this.authService.createUser(email, password);
                     await this.authService.setClaims(userCreated.uid);
-                    await this.authService.sendMailForEmailVerification(email);
-                    res.status(201).statusMessage = "User inscrit";
-                    res.send({message: "Un mail vous a été envoyé. Merci de le confirmer."}).end()
+
+                    const link = await this.authService.sendLinkForMailVerification(email);
+                    res.status(201).statusMessage = "User created";
+                    res.send({link: link}).end()
 
                 } catch (e: any) {
-                    res.status(400).send({message: e.message}).end()
+                    res.status(400).send({message: e.code}).end()
                 }
 
 
@@ -79,8 +80,8 @@ export class AuthController {
                     return res.status(400).end();
                 }
 
-                await this.authService.sendMailForResetPassword(email);
-                res.status(200).send({message: "Email envoyé"})
+                const link = await this.authService.sendMailForResetPassword(email);
+                res.status(200).send({link: link})
 
             } catch (e: any) {
                 console.log(`${e}`);
