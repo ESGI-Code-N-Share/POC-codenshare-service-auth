@@ -18,18 +18,18 @@ jobs:
           echo "$version"
 
       # https://github.com/actions/create-release
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-#        with:
-#          tag_name: echo $version
-#          release_name: Release echo $version
-#          body: |
-#            Test
-#          draft: false
-#          prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ version }}
+          release_name: Release ${{ version }}
+          body: |
+            Test
+          draft: false
+          prerelease: false
 
 #  build_image_and_deploy_image_on_docker_hub:
 #    needs: create_release  # Failed if create_release failed
