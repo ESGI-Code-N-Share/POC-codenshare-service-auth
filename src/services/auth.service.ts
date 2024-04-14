@@ -1,5 +1,6 @@
 import {Auth} from "firebase-admin/auth";
 import {getFirebase} from "./firebase.service";
+import {RoleEnum} from "../role";
 
 
 export class AuthService {
@@ -11,30 +12,52 @@ export class AuthService {
         }
     }
 
-    async login() {
-        console.log(this.auth)
-        console.log("Login .....")
+    async checkToken(token: string) {
+        return this.auth.verifyIdToken(token);
+    }
 
-        // todo: logique métier
-        // signInWithEmailAndPassword(mail, password);
+    async setClaims(uuid: string) {
+        await this.auth.setCustomUserClaims(uuid, {
+            roles: [RoleEnum.USER]
+        })
+    }
 
-        // todo: get role of user with uuid
+    async admin() {
+        console.log("Autorisé")
+    }
+
+    async getUser(uid: string) {
+        return this.auth.getUser(uid);
+    }
 
 
-        // todo : return user or token
+    async createUser(email: string, password: string) {
+        console.log("Create User...");
+
+        if (!email.trim() || !password.trim()) {
+            throw new Error("auth/empty-fields");
+        }
+
+        return this.auth.createUser({
+            email: email,
+            password: password,
+        })
 
     }
 
-    async signUp() {
-        // console.log(this.auth)
-        console.log("Login .....")
+    async sendLinkForMailVerification(email: string) {
+        if (!email.trim()) {
+            throw new Error("email is missing");
+        }
 
-        // todo: logique métier
-        // signUpWithEmailAndPassword(mail, password);
+        return await this.auth.generateEmailVerificationLink(email);
+    }
 
-        // todo: set role of user with uuid in firestore
+    async sendMailForResetPassword(email: string) {
+        if (!email.trim()) {
+            throw new Error("email is missing");
+        }
 
-        // todo : return user or token
-
+        return this.auth.generatePasswordResetLink(email);
     }
 }

@@ -7,7 +7,7 @@ import {unknownRouteMiddleware} from "./middlewares/unknown-route.middleware";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 8080;
 
 export async function start_express() {
 
