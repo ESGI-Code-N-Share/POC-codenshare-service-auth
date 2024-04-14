@@ -46,46 +46,49 @@ jobs:
       PATH_DOCKERFILE: "./Dockerfile"
 
     steps:
-      # https://github.com/actions/checkout
-      - uses: actions/checkout@v4
+      - name: test
+        run: echo ${{ needs.create_release.outputs.version }}
 
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag poc-auth:$(date +%s)
-
-      # https://github.com/docker/login-action
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_HUB_LOGIN }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-
-      - name: Fetch projet version
-        id: fetch_project_version
-        run: |
-          sudo apt-get update && sudo apt-get install jq
-          version=$(jq -r '.version' package.json)
-          echo "$version"
-          echo "::set-output name=version::$version"
-
-      # https://github.com/docker/build-push-action
-      - name: Push Docker image with release version
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ env.PATH_DOCKERFILE }}
-          push: true
-          tags: ${{ env.REPOSITORY }}:${{ steps.fetch_project_version.outputs.version }}
-
-      - name: Push Docker image with latest version
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ${{ env.PATH_DOCKERFILE }}
-          push: true
-          tags: ${{ env.REPOSITORY }}:stage-latest
-
-      - name: Deploy on render (stage)
-        env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-        run: |
-          curl "$deploy_url"
+#      # https://github.com/actions/checkout
+#      - uses: actions/checkout@v4
+#
+#      - name: Build the Docker image
+#        run: docker build . --file Dockerfile --tag poc-auth:$(date +%s)
+#
+#      # https://github.com/docker/login-action
+#      - name: Log in to Docker Hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKER_HUB_LOGIN }}
+#          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+#
+#      - name: Fetch projet version
+#        id: fetch_project_version
+#        run: |
+#          sudo apt-get update && sudo apt-get install jq
+#          version=$(jq -r '.version' package.json)
+#          echo "$version"
+#          echo "::set-output name=version::$version"
+#
+#      # https://github.com/docker/build-push-action
+#      - name: Push Docker image with release version
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          file: ${{ env.PATH_DOCKERFILE }}
+#          push: true
+#          tags: ${{ env.REPOSITORY }}:${{ steps.fetch_project_version.outputs.version }}
+#
+#      - name: Push Docker image with latest version
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          file: ${{ env.PATH_DOCKERFILE }}
+#          push: true
+#          tags: ${{ env.REPOSITORY }}:stage-latest
+#
+#      - name: Deploy on render (stage)
+#        env:
+#          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+#        run: |
+#          curl "$deploy_url"
