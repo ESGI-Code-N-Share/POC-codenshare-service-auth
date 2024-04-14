@@ -21,7 +21,7 @@ jobs:
           sudo apt-get update && sudo apt-get install jq
           version=$(jq -r '.version' package.json)
           echo "$version"
-          echo "version_project=$version" >> $VERSION_PROJECT
+          echo "version_project=$version" >> "$VERSION_PROJECT"
           echo "${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}"
       
 
