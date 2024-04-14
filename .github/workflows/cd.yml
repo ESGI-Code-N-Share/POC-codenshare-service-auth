@@ -66,7 +66,7 @@ jobs:
           context: .
           file: ${{ env.PATH_DOCKERFILE }}
           push: true
-          tags: ${{ env.REPOSITORY }}:${{steps.fetch_project_version.outputs.version}}
+          tags: ${{ env.REPOSITORY }}:${{ needs.create_release.outputs.fetch_project_version }}
 
       - name: Push Docker image with latest version
         uses: docker/build-push-action@v5
