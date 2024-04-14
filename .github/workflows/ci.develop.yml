@@ -1,4 +1,4 @@
-name: CI-analysis
+name: CI-develop-analysis
 
 on:
   push:
