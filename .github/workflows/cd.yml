@@ -2,6 +2,10 @@ name: CD-Docker
 
 on:
   workflow_dispatch:
+    inputs:
+      release-description:
+        description: 'Release Description'
+        required: true
 
 jobs:
   create_release:
@@ -29,7 +33,7 @@ jobs:
           tag_name: ${{ steps.fetch_project_version.outputs.version }}
           release_name: Release ${{steps.fetch_project_version.outputs.version}}
           body: |
-            Test
+            v.${{ inputs.release-description }}
           draft: false
           prerelease: false
 
