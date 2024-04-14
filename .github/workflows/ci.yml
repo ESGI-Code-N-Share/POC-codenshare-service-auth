@@ -2,11 +2,10 @@ name: CI-analysis
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "develop" ]
     types: [ opened, synchronize, reopened ]
-  workflow_dispatch:
 
 permissions:
   contents: read
