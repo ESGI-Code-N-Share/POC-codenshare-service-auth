@@ -7,8 +7,7 @@
     "dev": "nodemon -e ts --exec \"npm run build && npm run start\"",
     "start": "node dist/bin/server.js",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "cd firebase.local && firebase emulators:start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
