@@ -84,8 +84,8 @@ jobs:
           push: true
           tags: ${{ env.REPOSITORY }}:stage-latest
 
-#      - name: Deploy
-#        env:
-#          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-#        run: |
-#          curl "$deploy_url"
+      - name: Deploy on render (stage)
+        env:
+          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl "$deploy_url"
