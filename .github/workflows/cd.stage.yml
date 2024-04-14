@@ -44,6 +44,7 @@ jobs:
     env:
       REPOSITORY: "melissaesgi/poc-auth"
       PATH_DOCKERFILE: "./Dockerfile"
+      TEST: ${{ needs.create_release.outputs.version }}
 
     steps:
       - name: test
