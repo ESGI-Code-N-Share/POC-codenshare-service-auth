@@ -22,7 +22,7 @@ jobs:
           version=$(jq -r '.version' package.json)
           echo "$version"
           echo "version_project=$version" >> "$VERSION_PROJECT"
-          echo "${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}"
+          echo "$VERSION_PROJECT"
       
 
       # https://github.com/actions/create-release
@@ -32,8 +32,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}
-          release_name: Release ${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}
+          tag_name: ${{ env.$VERSION_PROJECT }}
+          release_name: Release ${{ env.$VERSION_PROJECT }}
           body: |
             ${{ inputs.release-description }}
           draft: false
@@ -46,7 +46,7 @@ jobs:
     env:
       REPOSITORY: "melissaesgi/poc-auth"
       PATH_DOCKERFILE: "./Dockerfile"
-      TEST: ${{ needs.create_release.outputs.VERSION_PROJECT }}
+      TEST: ${{ env.$VERSION_PROJECT }}
 
     steps:
       - name: test
