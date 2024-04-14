@@ -2,11 +2,10 @@ name: CI-analysis
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
     types: [ opened, synchronize, reopened ]
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,6 +33,3 @@ jobs:
 
 #      - name: Run Tests
 #        run: npm run test
-
-
-# todo : add sonar
