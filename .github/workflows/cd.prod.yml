@@ -1,4 +1,4 @@
-name: CD-Docker
+name: CD-prod-Docker
 
 on:
   workflow_dispatch:
