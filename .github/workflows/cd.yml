@@ -15,6 +15,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install jq
           version=$(jq -r '.version' package.json)
+          echo "$version"
 
       # https://github.com/actions/create-release
 #      - name: Create Release
