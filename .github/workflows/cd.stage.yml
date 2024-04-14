@@ -20,8 +20,9 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install jq
           version=$(jq -r '.version' package.json)
-          echo "version_project=$(jq -r '.version' package.json)" >> "$VERSION_PROJECT"
-          echo "${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}"
+          echo "$version"
+      #          echo "version_project=$version" >> "$VERSION_PROJECT"
+      #          echo "${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}"
       
 
       # https://github.com/actions/create-release
