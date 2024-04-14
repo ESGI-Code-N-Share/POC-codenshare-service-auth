@@ -20,8 +20,9 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install jq
           version=$(jq -r '.version' package.json)
-          echo "$version"
-          echo "version_project=$version" >> "$VERSION_PROJECT"
+          echo "version_project=$(jq -r '.version' package.json)" >> "$VERSION_PROJECT"
+          echo "${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}"
+      
 
       # https://github.com/actions/create-release
       - name: Create Release
@@ -30,7 +31,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ steps.fetch_project_version.outputs.version }}
+          tag_name: ${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}
           release_name: Release ${{ steps.fetch_project_version.outputs.VERSION_PROJECT }}
           body: |
             ${{ inputs.release-description }}
